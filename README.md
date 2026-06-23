@@ -235,5 +235,508 @@ CLOUD SECURITY ROADMAP: Beginner -> Expert
     ├── Newsletters/blogs: tl;dr sec, Last Week in AWS (security bits), CloudSecList
     └── Watch the frontier: AI/agentic workload security, NHIs (non-human identities), DSPM
 
+Supporting Tree: Knowledge Dependency (learn in this order)
+
+Knowledge Dependency Chain
+│
+├── Linux + Networking + Scripting (Python/Bash)        [must precede everything]
+│   └── enables -> Cloud fundamentals (one provider)
+│       └── enables -> IAM & identity                   [the gatekeeper topic]
+│           ├── enables -> CSPM / posture management
+│           ├── enables -> Network & data security
+│           └── enables -> Logging & monitoring
+│               └── enables -> Detection & incident response
+│                   └── enables -> Detection engineering / purple teaming
+│
+├── Containers (Docker) ----------> Kubernetes ----------> Kubernetes security (KSPM)
+│                                                          (Falco, kube-bench, OPA/Kyverno)
+│
+├── IaC (Terraform) ---------------> Shift-left / policy-as-code -> CI/CD security
+│
+└── Frameworks (CSA CCM, CIS, NIST, MITRE) run in parallel the whole way through
+
+
+Supporting Tree: Tools (grouped by function)
+
+Cloud Security Tooling
+│
+├── Posture / Misconfiguration (CSPM)
+│   ├── OSS: Prowler, ScoutSuite, CloudSploit, OpenSCAP
+│   └── Native: AWS Security Hub, Azure Defender for Cloud, GCP Security Command Center
+│
+├── IaC / Shift-left scanning
+│   ├── Checkov, Trivy (config mode), KICS
+│   └── tfsec [merged into Trivy]
+│
+├── Vulnerability / Image / SBOM
+│   ├── Trivy (CVEs + secrets + SBOM + IaC), Grype + Syft, Clair
+│   └── Cosign / Sigstore (signing & verification)
+│
+├── Kubernetes / Container
+│   ├── Posture & CIS: kube-bench, Kubescape, kubeaudit
+│   ├── Runtime (eBPF): Falco, Tetragon, KubeArmor, Sysdig (Falco-based, commercial)
+│   ├── Policy-as-code: OPA/Gatekeeper (Rego), Kyverno (YAML)
+│   └── Network: Cilium (+ Hubble), Calico
+│
+├── Identity / Entitlement (CIEM) & attack-path graphing
+│   ├── AWS IAM Access Analyzer, native CIEM, conditional access (Azure)
+│   └── PMapper, Cartography (asset & relationship graphs)
+│
+├── Auto-remediation / policy engine
+│   └── Cloud Custodian, native EventBridge/Logic Apps -> function remediation
+│
+├── Detection & response (CDR)
+│   ├── GuardDuty, Defender for Cloud, SCC; Sigma rules; Sentinel (KQL)
+│   └── Stratus Red Team / Leonidas (adversary emulation -> validate detections)
+│
+├── Offensive cloud [authorised labs only]
+│   ├── Pacu (AWS), enumerate-iam, CloudGoat/AWSGoat targets, IAM Vulnerable
+│   └── ROADtools / AzureHound / GraphRunner (Azure/Entra), GCPGoat
+│
+└── Unified commercial (CNAPP) [expensive -- demo via trials]
+    ├── Wiz, Prisma Cloud, Microsoft Defender for Cloud, Orca
+    └── CrowdStrike Falcon Cloud Security, SentinelOne Singularity CNS, Sysdig Secure, Aikido
+
+
+Supporting Tree: Skills
+
+Skills
+│
+├── Technical
+│   ├── IAM / identity & federation (deepest skill in the field)
+│   ├── Network & data security in cloud
+│   ├── Container & Kubernetes hardening
+│   ├── Logging, monitoring, detection engineering
+│   └── Offensive cloud (enumeration, priv-esc, attack paths) -- authorised
+│
+├── Analytical
+│   ├── Attack-path & blast-radius thinking (not flat finding lists)
+│   ├── Triage & prioritisation by exploitability + impact
+│   └── Threat modelling (STRIDE, attack trees) for cloud architectures
+│
+├── Operational
+│   ├── Incident response & forensics in cloud
+│   ├── Guardrail design (preventive + detective)
+│   └── Vulnerability & posture management lifecycle
+│
+├── Engineering
+│   ├── Python + Bash + Go (read), Terraform, Docker/K8s
+│   ├── CI/CD security gates, detection-as-code, policy-as-code
+│   └── Automation & auto-remediation
+│
+├── Governance
+│   ├── Mapping controls to CSA CCM / CIS / NIST / ISO 27017/27018
+│   ├── Compliance evidence (SOC 2, PCI DSS, HIPAA, DPDP/GDPR)
+│   └── Risk registers & exception handling
+│
+├── Communication
+│   ├── Two-audience reporting (engineer ticket vs risk-owner summary)
+│   └── Remediation guidance engineers will actually accept
+│
+└── Leadership (senior+)
+    ├── Security strategy & landing-zone standards
+    ├── Mentoring, cross-team influence, vendor evaluation
+    └── Driving secure-by-default culture
+
+
+Supporting Tree: Lab (build it up gradually)
+
+Home / Cloud Lab Build-Out
+│
+├── Stage 1: Single-cloud sandbox
+│   ├── AWS free-tier account + HARD billing alerts + budget caps
+│   ├── CLI + SDK configured (named profiles, no long-lived root keys)
+│   └── First targets: flaws.cloud, flaws2.cloud (nothing to deploy)
+│
+├── Stage 2: Deployable vulnerable targets
+│   ├── CloudGoat (terraform) -- run + destroy each scenario
+│   ├── IAM Vulnerable (priv-esc playground), Sadcloud, AWSGoat
+│   └── Discipline: cloud-nuke / aws-nuke teardown after every session
+│
+├── Stage 3: Multi-cloud
+│   ├── Add Azure + GCP free tiers; EntraGoat (Entra), GCPGoat
+│   └── Practice cross-cloud posture scanning with Prowler/ScoutSuite
+│
+├── Stage 4: Defender stack
+│   ├── Central logging account (org CloudTrail -> S3 -> Athena/KQL)
+│   ├── Local Kubernetes (kind/minikube) + Falco + Trivy + kube-bench + Kyverno
+│   └── Detection-as-code repo with Sigma rules + tests
+│
+└── Stage 5: Full pipeline
+    ├── IaC repo -> CI scans (Checkov/Trivy) -> image sign (Cosign) -> deploy gate
+    └── Stratus Red Team emulation -> verify detections fire
+
+
+Supporting Tree: Projects
+
+Projects (each must produce EVIDENCE for a portfolio)
+
+├── BEGINNER
+│   ├── Public-bucket hunt & fix
+│   │   ├── Objective: find and remediate publicly-exposed storage
+│   │   ├── Environment: your AWS/Azure/GCP sandbox
+│   │   ├── Tasks: scan with Prowler, fix, add a preventive guardrail, re-scan
+│   │   ├── Tools: Prowler, native CLI, SCP/Azure Policy
+│   │   ├── Deliverables: finding -> fix -> verification report
+│   │   ├── Skills: CSPM, data exposure, guardrails
+│   │   └── Portfolio: sanitised before/after write-up + screenshots
+│   ├── Least-privilege IAM refactor (over-permissioned role -> minimal, with proof)
+│   ├── Org-wide CloudTrail + Athena query pack (10 useful security queries)
+│   ├── Segmented VPC/VNet with controlled egress (architecture diagram)
+│   └── CIS-benchmark a Linux VM + a cloud account (kube-bench / Prowler compliance)
+│
+├── INTERMEDIATE
+│   ├── CloudGoat scenario walkthroughs (attack + the detections that would catch it)
+│   ├── OSS "DIY CNAPP" stack (Prowler+Trivy+ScoutSuite+Cloud Custodian) + gap analysis
+│   ├── CI/CD security gate (Checkov + Trivy + Cosign signing, fails on critical)
+│   ├── Kubernetes hardening lab (kube-bench fixes + Kyverno policies + Falco rules)
+│   └── Cloud incident-response runbook + a worked tabletop (key compromise scenario)
+│
+├── ADVANCED
+│   ├── Multi-cloud detection-as-code repo (Sigma + KQL, mapped to ATT&CK Cloud, tested with Stratus)
+│   ├── Attack-path analysis tool/report using Cartography or PMapper on a real account
+│   ├── Auto-remediation framework with Cloud Custodian (10 policies + dashboards)
+│   ├── Entra/OAuth illicit-consent attack-and-defend lab (ties to your BEC IR work)
+│   └── Secure landing-zone reference (IaC) with guardrails baked in
+│
+└── CAPSTONE (interview centrepieces)
+    ├── End-to-end secured platform: IaC -> scanned pipeline -> hardened K8s -> detection -> IR runbook
+    ├── Full cloud security assessment of a deliberately-vulnerable estate, written as a client report
+    └── Open-source contribution to a cloud security tool (Prowler/Trivy/Kubescape) or a published technique
+
+
+Supporting Tree: Certification Path (verified current as of 2026)
+
+Certification Sequence
+│
+├── FOUNDATION (optional if experienced)
+│   ├── CompTIA Security+        [useful, HR gate] -- general security baseline
+│   └── AWS Cloud Practitioner / Azure AZ-900 / SC-900  [useful] -- cloud + security basics
+│
+├── CLOUD FLUENCY (before security specialisation)
+│   └── AWS Solutions Architect Associate (or Azure/GCP associate)  [useful]
+│       -- builds the service knowledge the security exams assume
+│
+├── VENDOR-NEUTRAL CORE
+│   ├── CCSK v5 (CSA)            [useful, great first cloud-security cert]
+│   │     Open-book; CSA Security Guidance v5 + ENISA; no experience requirement
+│   └── CCSP (ISC2)             [essential at senior level; gold-standard, vendor-neutral]
+│         6 domains; requires 5 yrs IT / 3 yrs infosec / 1 yr in a CCSP domain
+│         (CISSP holders auto-qualify; pass first as "Associate" if short on experience)
+│
+├── VENDOR-SPECIFIC (pick the cloud you actually run)
+│   ├── AWS Certified Security - Specialty  [essential if AWS]
+│   │     NOTE: SCS-C03 replaced SCS-C02 in Dec 2025 -- study the C03 guide
+│   ├── Azure: AZ-500 (Security Engineer Associate) -> SC-100 (Architect) [+ SC-300 identity]
+│   └── Google Professional Cloud Security Engineer  [essential if GCP]
+│
+├── PRACTICAL / HANDS-ON
+│   ├── CKS (Certified Kubernetes Security Specialist)  [essential if K8s; CKA is a hard prereq]
+│   └── GIAC GCSA / GCSE (SANS)  [useful but expensive] -- automation / enterprise cloud sec
+│
+└── LEADERSHIP / GOVERNANCE (year 3+)
+    ├── CISSP (ISC2)            [useful for architect/leadership roles]
+    └── CISM / CCAK (ISACA)     [optional] -- management / cloud audit
+
+Sequencing advice: CCSK → AWS Security Specialty (SCS-C03) → CKS → CCSP is a strong 18-month arc for an AWS-leaning engineer. Don't chase certs ahead of hands-on lab evidence — a CloudGoat portfolio beats a cert with no practice behind it.
+
+
+Supporting Tree: Career Progression
+
+Career Progression
+│
+├── Entry-Level
+│   ├── Roles: Cloud Security Analyst, Jr Cloud Security Engineer, SOC Analyst (cloud)
+│   ├── Expected: IAM basics, CSPM triage, logging, one cloud, scripting
+│   └── Portfolio: CloudGoat write-ups, least-privilege refactor, CSPM reports
+│
+├── Mid-Level
+│   ├── Roles: Cloud Security Engineer, DevSecOps Engineer, Cloud Pentester
+│   ├── Depth: automation (Terraform/Python), detection engineering, K8s security
+│   └── Specialise: offensive cloud OR detection/IR OR platform/DevSecOps
+│
+├── Senior
+│   ├── Roles: Sr Cloud Security Engineer, Lead, Principal Engineer
+│   ├── Owns: landing-zone standards, guardrail strategy, cross-team influence
+│   └── Mentoring + architecture + business-risk translation
+│
+└── Expert & Leadership
+    ├── Cloud Security Architect / Principal / Distinguished Engineer
+    ├── Head of Cloud Security / Security Director / CISO track (managerial)
+    ├── Independent consultant / MSSP practice lead (vs enterprise in-house)
+    └── Researcher / vendor security research / conference speaker
+
+Adjacent moves: AppSec, Detection Engineering, Red Team, GRC/Compliance, Platform Engineering.
+Transferable in: SOC analysis, network engineering, DevOps, software engineering.
+
+
+Supporting Tree: Frameworks & Standards (each with its purpose)
+
+Frameworks & Standards
+│
+├── Cloud-specific governance
+│   ├── CSA Cloud Controls Matrix (CCM)  -- control framework for cloud, maps to others
+│   ├── CSA Security Guidance v5          -- the CCSK study baseline
+│   ├── CSA CAIQ / STAR                   -- vendor assurance questionnaire/registry
+│   └── ISO/IEC 27017 & 27018             -- cloud controls + cloud PII protection
+│
+├── Risk & governance (general)
+│   ├── NIST CSF 2.0                      -- govern/identify/protect/detect/respond/recover
+│   ├── NIST SP 800-53                    -- control catalogue
+│   ├── NIST SP 800-207                   -- Zero Trust Architecture
+│   ├── NIST SP 800-204                   -- microservices/service-mesh security
+│   └── ISO/IEC 27001                     -- ISMS certification standard
+│
+├── Attack modelling & detection
+│   ├── MITRE ATT&CK (Cloud: IaaS/SaaS, Containers)  -- TTP taxonomy for detections
+│   ├── MITRE D3FEND                      -- defensive countermeasure mapping
+│   ├── Cyber Kill Chain / Diamond Model  -- intrusion analysis
+│   └── Sigma / YARA                      -- portable detection rule formats
+│
+├── Benchmarks & hardening
+│   ├── CIS Benchmarks (AWS/Azure/GCP/Kubernetes/Docker)  -- the config gold standard
+│   └── Provider Well-Architected "Security Pillar" (AWS/Azure/GCP)
+│
+├── Application & supply chain
+│   ├── OWASP Top 10 / API Top 10 / Cloud-Native Top 10
+│   ├── OWASP ASVS                        -- app verification standard
+│   └── SLSA / SBOM (SPDX, CycloneDX)     -- supply-chain integrity & provenance
+│
+├── Incident response & testing
+│   ├── NIST SP 800-61                    -- incident handling
+│   └── PTES / OSSTMM                     -- testing methodology
+│
+└── Compliance (sector/region -- only what applies)
+    ├── SOC 2, PCI DSS, HIPAA
+    ├── GDPR / India DPDP Act             -- data protection (relevant to your region)
+    └── DORA / NIS2 (EU)                  -- if serving EU financial/critical sectors
+
+
+Supporting Tree: Attack-and-Defence (cloud)
+
+Technique -> Visibility -> Detection -> Investigation -> Prevention -> Response
+
+├── Stolen access key / standing creds
+│   ├── Log source: CloudTrail / Activity Log / Audit Logs
+│   ├── Detect: GuardDuty creds-from-new-IP, impossible travel
+│   ├── Investigate: session timeline, what the key touched
+│   ├── Prevent: short-lived creds, IAM Identity Center, no long-lived keys
+│   └── Respond: deactivate key, revoke sessions, rotate, review blast radius
+│
+├── IMDS credential theft via SSRF
+│   ├── Log: VPC flow + app logs; Detect: unusual metadata access
+│   ├── Prevent: IMDSv2 enforced, egress controls, WAF
+│   └── Respond: rotate role creds, patch SSRF, restrict instance role
+│
+├── IAM privilege escalation (pass-role, policy attach, role chaining)
+│   ├── Detect: anomalous AttachPolicy/PassRole/CreateAccessKey
+│   ├── Prevent: permission boundaries, deny risky actions via SCP, IAM Access Analyzer
+│   └── Respond: revoke escalated grants, snapshot for forensics
+│
+├── Public storage / data exfiltration
+│   ├── Detect: public-ACL/policy changes, large unusual GetObject volume
+│   ├── Prevent: block-public-access org-wide, DSPM classification
+│   └── Respond: lock bucket, identify exposed data, breach assessment
+│
+├── OAuth illicit consent / malicious app (Entra)
+│   ├── Detect: new high-privilege app consent, unusual Graph access
+│   ├── Prevent: admin-consent workflow, app governance, conditional access
+│   └── Respond: revoke app, revoke tokens, hunt mailbox/Graph activity
+│
+└── Container escape / cryptomining
+    ├── Log/Detect: Falco runtime rules (shell in container, /etc/shadow read, odd egress)
+    ├── Prevent: non-root, read-only FS, Kyverno admission policy, signed images
+    └── Respond: kill pod, cordon node, forensic snapshot, rotate cluster secrets
+
+
+Supporting Tree: Specialisations (year 2+)
+
+Expert Specialisations
+│
+├── Offensive Cloud / Cloud Red Team
+│   └── Foundation: deep IAM + provider internals; Tools: Pacu, attack-path graphs; authorised engagements
+├── Cloud Detection Engineering & Threat Hunting
+│   └── Foundation: logging + ATT&CK Cloud; detection-as-code at scale; SIEM/UEBA
+├── Kubernetes & Cloud-Native Security
+│   └── Foundation: CKA/CKS; eBPF runtime, supply chain, service mesh, admission control
+├── DevSecOps / Platform Security Engineering
+│   └── Foundation: IaC + CI/CD; secure-by-default platforms, golden paths, policy-as-code
+├── Cloud Security Architecture
+│   └── Foundation: multi-cloud + Zero Trust; landing zones, enterprise standards
+├── Data Security Posture (DSPM) & Privacy
+│   └── Foundation: data classification + crypto; sensitive-data flow, NHIs, AI-data governance
+├── Cloud GRC / Compliance & Audit
+│   └── Foundation: CCM/ISO/NIST; control mapping, evidence automation, audit readiness
+└── AI / Agentic Workload Security  [emerging, 2026 frontier]
+    └── Foundation: identity + runtime; over-privileged AI agents, model/data pipeline security
+
+
+Supporting Tree: Technology Ecosystem
+
+How the pieces relate
+│
+Identities (human + non-human/NHIs) ──grant access to──► Cloud control plane (APIs)
+        │                                                        │
+        ▼                                                        ▼
+   Workloads (VMs, containers, serverless) ◄──run on──► Cloud platform (compute/storage/net)
+        │                                                        │
+        ▼                                                        ▼
+   Applications / APIs ──read/write──► Data stores (object, DB, secrets, keys/KMS)
+        │                                                        │
+        └──────────► Networks (VPC/VNet, egress, WAF) ◄──────────┘
+                              │
+        Security controls layer over ALL of the above:
+        CSPM (posture) • CIEM (entitlements) • CWPP (workload) • DSPM (data)
+        KSPM (k8s) • CDR (detection) ── all converging into ──► CNAPP
+                              │
+                    Telemetry ──► SIEM / detection-as-code ──► SOAR / auto-remediation
+
+
+Weekly Plan (blocks + 3 pacing tracks)
+
+Content is grouped into blocks; pick your pacing track for calendar length.
+
+Block A (Weeks 1-4):  Foundations review + AWS fundamentals + IAM basics
+   - Deliverable: deployed app stack; first least-privilege role
+Block B (Weeks 5-9):  IAM deep dive + CSPM (Prowler) + logging (CloudTrail/Athena)
+   - Deliverable: CSPM triage report; org logging set up
+Block C (Weeks 10-14): Network + data security + secrets + KMS; flaws.cloud
+   - Deliverable: segmented VPC diagram; public-bucket remediation
+Block D (Weeks 15-20): Tooling mastery (Trivy/Checkov/ScoutSuite) + CloudGoat scenarios
+   - Deliverable: CloudGoat write-ups + DIY-CNAPP gap analysis
+Block E (Weeks 21-26): IR + guardrails (SCP/Custodian) + detection-as-code (Sigma/KQL)
+   - Deliverable: IR runbook + 5 tested detections
+Block F (Weeks 27-34): Containers/K8s security (kube-bench, Falco, Kyverno) + CKS prep
+   - Deliverable: hardened cluster lab; CKS-ready
+Block G (Weeks 35-44): Automation (Terraform/Python), CI/CD gates, multi-cloud, capstone
+   - Deliverable: secured pipeline capstone + full assessment report
+Block H (Weeks 45-52): Cert push (AWS Security Specialty / CCSP) + interview prep + portfolio
+
+Pacing tracks (how the same content stretches)
+├── Fast track     (15-20 hrs/wk) -> ~7-9 months
+├── Standard track (8-12 hrs/wk)  -> ~12-14 months
+└── Part-time      (4-6 hrs/wk)   -> ~18-22 months
+
+
+Tool Comparison Tables
+
+CSPM / unified platforms
+
+ToolTypeCostDeploymentStrengthBest forProwlerOSS CSPMFreeCLI/agentlessMulti-cloud checks, fast startLearners, auditsScoutSuiteOSS CSPMFreeCLI/agentlessMulti-cloud, readable reportsQuick posture reviewSecurity Hub / Defender / SCCNativePay-as-you-goNativeDeep provider integrationSingle-cloud shopsWizCNAPPEnterpriseAgentless graphAttack-path Security GraphLarge multi-cloud orgsOrcaCNAPPEnterpriseAgentless SideScanningFast, no agentsAgent-averse teamsPrisma CloudCNAPPEnterpriseAgent + agentlessBroadest feature setFull-stack coverage
+
+Kubernetes security
+
+ToolLayerCostPurposeTrivyScanOSSImages, IaC, K8s configs, secrets, SBOMkube-benchPostureOSSCIS Kubernetes Benchmark auditKubescapePosture+OSSNSA/CISA + MITRE mapping, risk scoreFalcoRuntimeOSS (CNCF)eBPF syscall threat detectionKyverno / OPA GatekeeperPolicyOSSAdmission control / policy-as-codeCiliumNetworkOSS (CNCF)eBPF network policy + observability
+
+
+Portfolio Guide
+
+Sanitise everything: no real client names, redact IPs/account IDs/hostnames, use lab data only. Show range across attack, defend, and automate.
+
+cloud-security-portfolio/
+├── README.md                  (who you are, skills index, links to each project)
+├── projects/
+│   ├── 01-cspm-triage/         (Prowler report, before/after, verification)
+│   ├── 02-iam-least-privilege/ (over-priv role -> minimal, with policy diff)
+│   ├── 03-cloudgoat-writeups/  (attack steps + detections that would catch each)
+│   ├── 04-k8s-hardening/       (kube-bench fixes, Kyverno policies, Falco rules)
+│   └── 05-secured-pipeline/    (IaC scan + image sign + deploy gate)
+├── detections/                 (Sigma + KQL rules, ATT&CK-mapped, with tests)
+├── iac/                        (Terraform landing-zone snippets with guardrails)
+├── writeups/                   (CTF solutions, technique blog posts)
+└── scripts/                    (Python/boto3 automation, Cloud Custodian policies)
+
+README format per project: Objective → Environment → What you did → Findings/Result → Evidence (screenshots/diagrams) → Remediation → Skills demonstrated.
+
+
+Final Summary
+
+1. Ten most important skills
+
+
+IAM / identity & federation (the single deepest skill)
+Attack-path & blast-radius thinking (prioritisation over finding-dumps)
+CSPM / misconfiguration management lifecycle
+Cloud logging, monitoring & detection engineering
+Infrastructure-as-Code + policy-as-code (Terraform, OPA/Kyverno)
+Container & Kubernetes hardening
+Cloud incident response & forensics
+Automation & scripting (Python, Bash)
+Network & data security (segmentation, encryption, secrets, KMS)
+Framework mapping & risk communication (CSA CCM / CIS / NIST / ATT&CK)
+
+
+2. Ten most important tools / platforms
+
+
+Prowler (CSPM) 2. Trivy (scan/SBOM) 3. ScoutSuite (multi-cloud posture)
+Cloud Custodian (auto-remediation) 5. Falco (runtime) 6. kube-bench + Kubescape (K8s posture)
+OPA/Gatekeeper or Kyverno (policy) 8. Terraform + Checkov (IaC) 9. Pacu + CloudGoat (offensive/labs)
+A CNAPP (Wiz/Prisma/Defender/Orca — via trials) + native (CloudTrail/Security Hub/Sentinel)
+
+
+3. Five best portfolio projects
+
+
+End-to-end secured pipeline capstone (IaC → scan → sign → hardened K8s → detection → IR)
+CloudGoat attack write-ups paired with the detections that catch them
+IAM least-privilege refactor with policy diffs and proof
+Multi-cloud detection-as-code repo mapped to ATT&CK Cloud (tested with Stratus Red Team)
+Full cloud security assessment of a vulnerable estate, written as a client report
+
+
+4. Recommended certification sequence
+
+CCSK v5 → (cloud associate if needed) → AWS Security Specialty (SCS-C03) or AZ-500/SC-100 → CKS → CCSP → (CISSP/CCAK for leadership). Verify exam codes before booking — they churn (AWS moved C02→C03 in Dec 2025).
+
+5. Most common beginner mistakes
+
+
+Treating a green CSPM dashboard as "secure" while identity risk is wide open.
+Dumping scanner output instead of prioritising the few exploitable paths.
+Skipping IAM depth — it's the whole game.
+Watching 40 hours of video before ever touching a console (lab first).
+Leaving lab resources running (surprise bills) — set budget alerts and nuke nightly.
+Memorising one provider's UI instead of the transferable concepts.
+Ignoring automation — manual cloud security doesn't scale past one account.
+
+
+6. Job-readiness checklist
+
+
+ Can write and reason about a least-privilege IAM policy from scratch
+ Can run a CSPM scan and produce a prioritised, business-readable remediation report
+ Can stand up org-wide logging and query it (Athena/KQL)
+ Can build a segmented network with controlled egress
+ Can harden a Kubernetes cluster and write a Falco/Kyverno rule
+ Can automate a guardrail (SCP/Azure Policy + Cloud Custodian)
+ Can walk through a cloud IR scenario (key compromise) end to end
+ Has a public, sanitised portfolio with attack + defend + automate work
+ Holds at least one relevant cert (CCSK or a vendor security cert)
+
+
+7. 30-day starting plan
+
+Week 1: Foundations review + AWS free tier (billing alerts!) + Shared Responsibility.
+Week 2: IAM deep dive; do flaws.cloud levels 1–6.
+Week 3: Install Prowler, scan a sandbox, triage and fix the top findings.
+Week 4: Enable CloudTrail, write 5 Athena queries, document everything in a Git repo.
+
+8. 90-day progress plan
+
+Add ScoutSuite multi-cloud, CloudGoat scenarios with paired detections, a segmented VPC,
+secrets/KMS work, and start the DIY-CNAPP OSS stack. Begin CCSK v5 study. Two portfolio projects done.
+
+9. One-year mastery plan
+
+Hands-on across AWS+Azure+GCP; K8s security (Falco/Kyverno/kube-bench) with CKS;
+automation in Terraform/Python; detection-as-code mapped to ATT&CK; a secured-pipeline capstone;
+AWS Security Specialty (or AZ-500) earned; 4–5 portfolio projects; applying for engineer roles.
+
+10. Recommended next specialisations
+
+Cloud Detection Engineering • Kubernetes/Cloud-Native Security • Offensive Cloud/Red Team •
+DevSecOps/Platform Security • Cloud Security Architecture • DSPM/Data & Privacy •
+Cloud GRC/Audit • AI/Agentic Workload Security (the 2026 frontier).
 ...
 ```
