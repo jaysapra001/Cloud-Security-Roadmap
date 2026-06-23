@@ -1,5 +1,5 @@
 ```
-**CLOUD SECURITY ROADMAP: Beginner -> Expert**
+CLOUD SECURITY ROADMAP: Beginner -> Expert
 
 ├── Phase 0: Domain Orientation (3-5 days)
 │   ├── What cloud security actually is
