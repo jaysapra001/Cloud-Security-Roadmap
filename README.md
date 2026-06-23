@@ -1,3 +1,4 @@
+```
 **CLOUD SECURITY ROADMAP: Beginner -> Expert**
 
 ├── Phase 0: Domain Orientation (3-5 days)
@@ -233,3 +234,6 @@
     ├── Conferences: fwd:cloudsec, BSides, re:Inforce, KubeCon, Black Hat/DEF CON cloud villages
     ├── Newsletters/blogs: tl;dr sec, Last Week in AWS (security bits), CloudSecList
     └── Watch the frontier: AI/agentic workload security, NHIs (non-human identities), DSPM
+
+...
+```
