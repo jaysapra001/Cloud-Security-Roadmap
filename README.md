@@ -628,7 +628,6 @@ Kubernetes security
 
 ToolLayerCostPurposeTrivyScanOSSImages, IaC, K8s configs, secrets, SBOMkube-benchPostureOSSCIS Kubernetes Benchmark auditKubescapePosture+OSSNSA/CISA + MITRE mapping, risk scoreFalcoRuntimeOSS (CNCF)eBPF syscall threat detectionKyverno / OPA GatekeeperPolicyOSSAdmission control / policy-as-codeCiliumNetworkOSS (CNCF)eBPF network policy + observability
 
-
 Portfolio Guide
 
 Sanitise everything: no real client names, redact IPs/account IDs/hostnames, use lab data only. Show range across attack, defend, and automate.
@@ -647,93 +646,6 @@ cloud-security-portfolio/
 └── scripts/                    (Python/boto3 automation, Cloud Custodian policies)
 
 README format per project: Objective → Environment → What you did → Findings/Result → Evidence (screenshots/diagrams) → Remediation → Skills demonstrated.
-
-
-Final Summary
-
-1. Ten most important skills
-
-
-IAM / identity & federation (the single deepest skill)
-Attack-path & blast-radius thinking (prioritisation over finding-dumps)
-CSPM / misconfiguration management lifecycle
-Cloud logging, monitoring & detection engineering
-Infrastructure-as-Code + policy-as-code (Terraform, OPA/Kyverno)
-Container & Kubernetes hardening
-Cloud incident response & forensics
-Automation & scripting (Python, Bash)
-Network & data security (segmentation, encryption, secrets, KMS)
-Framework mapping & risk communication (CSA CCM / CIS / NIST / ATT&CK)
-
-
-2. Ten most important tools / platforms
-
-
-Prowler (CSPM) 2. Trivy (scan/SBOM) 3. ScoutSuite (multi-cloud posture)
-Cloud Custodian (auto-remediation) 5. Falco (runtime) 6. kube-bench + Kubescape (K8s posture)
-OPA/Gatekeeper or Kyverno (policy) 8. Terraform + Checkov (IaC) 9. Pacu + CloudGoat (offensive/labs)
-A CNAPP (Wiz/Prisma/Defender/Orca — via trials) + native (CloudTrail/Security Hub/Sentinel)
-
-
-3. Five best portfolio projects
-
-
-End-to-end secured pipeline capstone (IaC → scan → sign → hardened K8s → detection → IR)
-CloudGoat attack write-ups paired with the detections that catch them
-IAM least-privilege refactor with policy diffs and proof
-Multi-cloud detection-as-code repo mapped to ATT&CK Cloud (tested with Stratus Red Team)
-Full cloud security assessment of a vulnerable estate, written as a client report
-
-
-4. Recommended certification sequence
-
-CCSK v5 → (cloud associate if needed) → AWS Security Specialty (SCS-C03) or AZ-500/SC-100 → CKS → CCSP → (CISSP/CCAK for leadership). Verify exam codes before booking — they churn (AWS moved C02→C03 in Dec 2025).
-
-5. Most common beginner mistakes
-
-
-Treating a green CSPM dashboard as "secure" while identity risk is wide open.
-Dumping scanner output instead of prioritising the few exploitable paths.
-Skipping IAM depth — it's the whole game.
-Watching 40 hours of video before ever touching a console (lab first).
-Leaving lab resources running (surprise bills) — set budget alerts and nuke nightly.
-Memorising one provider's UI instead of the transferable concepts.
-Ignoring automation — manual cloud security doesn't scale past one account.
-
-
-6. Job-readiness checklist
-
-
- Can write and reason about a least-privilege IAM policy from scratch
- Can run a CSPM scan and produce a prioritised, business-readable remediation report
- Can stand up org-wide logging and query it (Athena/KQL)
- Can build a segmented network with controlled egress
- Can harden a Kubernetes cluster and write a Falco/Kyverno rule
- Can automate a guardrail (SCP/Azure Policy + Cloud Custodian)
- Can walk through a cloud IR scenario (key compromise) end to end
- Has a public, sanitised portfolio with attack + defend + automate work
- Holds at least one relevant cert (CCSK or a vendor security cert)
-
-
-7. 30-day starting plan
-
-Week 1: Foundations review + AWS free tier (billing alerts!) + Shared Responsibility.
-Week 2: IAM deep dive; do flaws.cloud levels 1–6.
-Week 3: Install Prowler, scan a sandbox, triage and fix the top findings.
-Week 4: Enable CloudTrail, write 5 Athena queries, document everything in a Git repo.
-
-8. 90-day progress plan
-
-Add ScoutSuite multi-cloud, CloudGoat scenarios with paired detections, a segmented VPC,
-secrets/KMS work, and start the DIY-CNAPP OSS stack. Begin CCSK v5 study. Two portfolio projects done.
-
-9. One-year mastery plan
-
-Hands-on across AWS+Azure+GCP; K8s security (Falco/Kyverno/kube-bench) with CKS;
-automation in Terraform/Python; detection-as-code mapped to ATT&CK; a secured-pipeline capstone;
-AWS Security Specialty (or AZ-500) earned; 4–5 portfolio projects; applying for engineer roles.
-
-10. Recommended next specialisations
 
 Cloud Detection Engineering • Kubernetes/Cloud-Native Security • Offensive Cloud/Red Team •
 DevSecOps/Platform Security • Cloud Security Architecture • DSPM/Data & Privacy •
