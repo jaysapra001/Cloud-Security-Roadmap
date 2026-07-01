@@ -1,10 +1,11 @@
 ```
 CLOUD SECURITY ROADMAP: Beginner -> Expert
+
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/jaysapra001/Cloud-Security-Roadmap/main/roadmap%20image%20begginer%20to%20expert.png"
+    src="https://raw.githubusercontent.com/jaysapra001/Cloud-Security-Roadmap/1f84b3693a4bb4d32a1f774ab4a3d08f74455e45/roadmap%20image%20begginer%20to%20expert.png"
     alt="Cloud Security Roadmap — Beginner to Expert"
-    width="100%"
+    width="1312"
   />
 </p>
 
