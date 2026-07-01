@@ -2,14 +2,8 @@
 CLOUD SECURITY ROADMAP: Beginner -> Expert
 
 <h1 align="center">Cloud Security Roadmap: Beginner → Expert</h1>
+![Cloud Security Roadmap](https://raw.githubusercontent.com/jaysapra001/Cloud-Security-Roadmap/8347c48df87adcb5ae41b7b14e704c81f2aa0c62/roadmap%20image%20begginer%20to%20expert.png)
 
-<p align="center">
-  <img
-    src="./roadmap%20image%20begginer%20to%20expert.png"
-    alt="Cloud Security Roadmap — Beginner to Expert"
-    width="100%"
-  />
-</p>
 
 ├── Phase 0: Domain Orientation (3-5 days)
 │   ├── What cloud security actually is
